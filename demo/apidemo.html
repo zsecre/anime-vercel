@@ -85,6 +85,41 @@ textarea {
     }, false);
 
   })();
+
+  const API_BASE = "https://anime-vercel.vercel.app";
+
+// Search anime
+async function searchAnime(title) {
+  const response = await fetch(`${API_BASE}/anime/gogoanime/${encodeURIComponent(title)}`);
+  return await response.json();
+}
+
+// Get anime details
+async function getAnimeDetails(animeId) {
+  const response = await fetch(`${API_BASE}/anime/gogoanime/info/${animeId}`);
+  return await response.json();
+}
+
+// Get episode sources
+async function getEpisodeSources(episodeId) {
+  const response = await fetch(`${API_BASE}/anime/gogoanime/watch/${episodeId}`);
+  return await response.json();
+}
+
+// Usage example
+(async () => {
+  // Search
+  const searchData = await searchAnime("jujutsu kaisen");
+  console.log(searchData.results[0]);
+  
+  // Get details
+  const details = await getAnimeDetails(searchData.results[0].id);
+  console.log(`Episodes: ${details.totalEpisodes}`);
+  
+  // Get first episode sources
+  const sources = await getEpisodeSources(details.episodes[0].id);
+  console.log(sources.sources[0].url); // Streaming URL
+})();
 </script>
 </body>
 </html>
